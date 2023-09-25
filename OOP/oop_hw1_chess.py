@@ -1,0 +1,2 @@
+class Chessman:
+    color = 'white'
