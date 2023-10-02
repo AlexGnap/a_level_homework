@@ -1,6 +1,3 @@
-# Зробити можливим порівнювати Employee по рівню ЗП.
-
-
 class Employee:
     def __init__(self, name, daily_salary):
         self.name = name
