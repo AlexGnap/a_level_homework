@@ -1,8 +1,8 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 
-class ChessPiece:
-    def __init__(self, color, position):
+class ChessPiece(ABC):
+    def __init__(self, color: str, position: tuple):
         self.color = color
         self.position = position
 
@@ -12,23 +12,83 @@ class ChessPiece:
         else:
             self.color = "white"
 
-    def change_position(self, *args):
-        if len(args) == 2:
-            x, y = args
+    def change_position(self, new_position):
+        if self._is_valid_position(new_position):
+            self.position = new_position
         else:
-            x, y = args[0]
+            raise ValueError('Invalid position')
 
-        if self._is_valid_position(x, y):
-            self.position = (x, y)
-        else:
-            print("Invalid position")
-
-    def _is_valid_position(self, x, y):
+    def _is_valid_position(self, position):
+        x, y = position
         return 0 <= x <= 7 and 0 <= y <= 7
+
+    @abstractmethod
+    def can_move_to(self, position):
+        pass
 
     def __str__(self):
         return f"{self.color} figure is at position {self.position}"
 
-    @abstractmethod
-    def is_valid_move(self, x, y):
-        pass
+
+class Pawn(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = position[0] - self.position[0]
+        diff_y = position[1] - self.position[1]
+
+        if self.color == "white":
+            return diff_x == 1 and diff_y == 0
+        else:
+            return diff_x == -1 and diff_y == 0
+
+
+class Knight(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = abs(position[0] - self.position[0])
+        diff_y = abs(position[1] - self.position[1])
+
+        return (diff_x, diff_y) in [(2, 1), (1, 2)]
+
+
+class Bishop(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = abs(position[0] - self.position[0])
+        diff_y = abs(position[1] - self.position[1])
+        return diff_x == diff_y
+
+
+class Rook(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = abs(position[0] - self.position[0])
+        diff_y = abs(position[1] - self.position[1])
+        return diff_x == 0 or diff_y == 0
+
+
+class Queen(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = abs(position[0] - self.position[0])
+        diff_y = abs(position[1] - self.position[1])
+        return diff_x == diff_y or diff_x == 0 or diff_y == 0
+
+
+class King(ChessPiece):
+    def can_move_to(self, position):
+        diff_x = abs(position[0] - self.position[0])
+        diff_y = abs(position[1] - self.position[1])
+        return diff_x <= 1 and diff_y <= 1
+
+
+
+
+pawn = Pawn('white', (1, 3))
+print(pawn.position)
+
+pawn.change_position((2, 3))
+print(pawn.position)
+
+
+knight = Knight('black', (3, 3))
+print(knight.can_move_to((5, 4)))
+
+bishop = Bishop('white', (2, 2))
+print(bishop.can_move_to((4, 4)))
+print(bishop.can_move_to((2, 4)))
