@@ -1,8 +1,5 @@
 import csv
-
-
-class EmailAlreadyExistsException(Exception):
-    pass
+from exceptions import EmailAlreadyExistsException
 
 
 class Employee:
@@ -10,7 +7,11 @@ class Employee:
         self.name = name
         self.daily_salary = daily_salary
         self.email = email
+        self.validate(email)
         self.save_email()
+
+    def __str__(self):
+        return f'{self.__class__.__name__}: {self.name} '
 
     def work(self):
         return 'I come to the office.'
@@ -18,21 +19,15 @@ class Employee:
     def check_salary(self, days):
         return self.daily_salary * days
 
-    def validate(self):
-        # if '@' in self.email:
-        #     return True
-        # else:
-        #     return False
-        with open("email.csv", "r", newline='') as file:
+    def validate(self, email):
+        with open('emails.csv', 'r', newline='') as file:
             reader = csv.reader(file)
             for i in reader:
-                if i and i[0] == self.email:
-                    raise EmailAlreadyExistsException(self.email)
+                if i in reader:
+                    raise EmailAlreadyExistsException(f'{email} already exists')
 
     def save_email(self):
-        # if self.validate():
-        #     return f'{self.email} is saved'
-        with open("email.csv", "a", newline='') as file:
+        with open('emails.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([self.email])
 
@@ -108,10 +103,13 @@ class Developer(Employee):
 
 a = Employee('John', 25, 'john@gmail.com')
 print(a.name)
+print(a)
 
 b = Recruiter('Klo', 45, 'email@ukr.net')
+print(b)
 c = Developer('New', 48, 'new@gmail.com', 'JS')
 c1 = Developer('Jason', 48, 'superdev@gmail.com', ['Java', 'Ruby'])
+print(c1)
 c2 = Developer('Jules', 40, 'jb@yahoo.com', ['Python', 'Java', 'ASP.NET'])
 
 print(a.work())
@@ -131,5 +129,3 @@ print(c1.check_salary(7))
 
 print(c1 + c2)
 
-print(a.validate())
-print(a.save_email())
