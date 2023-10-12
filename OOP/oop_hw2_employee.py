@@ -6,12 +6,8 @@ class Employee:
     def __init__(self, name, daily_salary, email):
         self.name = name
         self.daily_salary = daily_salary
-        try:
-            self.validate(email)
-            self.email = email
-        except EmailAlreadyExistsException as e:
-            print(f'Error: {e} already exists')
-            raise
+        self.validate(email)
+        self.email = email
         self.save_email()
 
     def __str__(self):
@@ -84,7 +80,8 @@ class Developer(Employee):
         concat_name = self.name + ' ' + other.name
         comb_stack = list(set(self.tech_stack + other.tech_stack))
         salary = max(self.daily_salary, other.daily_salary)
-        return concat_name, comb_stack, salary
+        return Developer(concat_name, comb_stack, salary)
+
 
     def __lt__(self, other):
         return len(self.tech_stack) < len(other.tech_stack)
