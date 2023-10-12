@@ -6,9 +6,9 @@ class Employee:
     def __init__(self, name, daily_salary, email):
         self.name = name
         self.daily_salary = daily_salary
-        self.email = email
         try:
             self.validate(email)
+            self.email = email
         except EmailAlreadyExistsException as e:
             print(f'Error: {e} already exists')
             raise
