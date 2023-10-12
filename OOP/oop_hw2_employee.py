@@ -7,7 +7,11 @@ class Employee:
         self.name = name
         self.daily_salary = daily_salary
         self.email = email
-        self.validate(email)
+        try:
+            self.validate(email)
+        except EmailAlreadyExistsException as e:
+            print(f'Error: {e} already exists')
+            raise
         self.save_email()
 
     def __str__(self):
