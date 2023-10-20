@@ -1,3 +1,4 @@
+//1
 for (let i = 1; i <= 10; i++) {
     if (i % 3 === 0) {
         console.log("FizBuz");
@@ -10,6 +11,7 @@ for (let i = 1; i <= 10; i++) {
 
 
 
+//2
 function factorial(numb) {
     let result = 1;
     for (let i = 2; i <= numb; i++) {
@@ -20,6 +22,7 @@ function factorial(numb) {
 
 
 
+//3
 const sheetsInReamPaper = 500;
 const consumptionPerWeek = 1200;
 const weeksAmount = 8;
@@ -39,3 +42,21 @@ if (notRoundedResult > 0) {
 reamsNeeded = reamsNeeded - (reamsNeeded % 1)
 
 console.log(reamsNeeded)
+
+
+
+//4
+function floorAndPorch(apartmentNumber) {
+
+    let porch = apartmentNumber / 27;
+    porch = porch - porch % 1;
+
+    let apartmentInPorch = apartmentNumber % 27;
+
+    let floor = apartmentInPorch / 3;
+    floor = floor - floor % 1;
+
+    console.log(`My appartment №${apartmentNumber} is in ${porch} porch at ${floor}th floor`);
+}
+
+floorAndPorch(39);
