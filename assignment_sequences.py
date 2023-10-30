@@ -1,3 +1,6 @@
+"""
+Sequence functions implementations
+"""
 
 from typing import Union
 
@@ -22,7 +25,18 @@ def is_palindrome(origin: Union[str, int], /) -> bool:
     >>> assert is_palindrome(12345) is False
     >>> assert is_palindrome(12321) is True
     """
+    if not isinstance(origin, str):
+        origin = str(origin)
+    origin = ''.join(elem for elem in origin if elem.isalnum()).lower()
 
+    left = 0
+    right = len(origin) - 1
+    while left <= right:
+        if origin[left] != origin[right]:
+            return False
+        left += 1
+        right -= 1
+    return True
 
 def get_longest_palindrome(origin: str, /) -> str:
     """
@@ -36,6 +50,22 @@ def get_longest_palindrome(origin: str, /) -> str:
     >>> assert get_longest_palindrome("1012210") == "012210"
     """
 
+    longest_count = ''
+    for i in range(len(origin)):
+        left, right = i, i
+        while left >= 0 and right < len(origin) and origin[left] == origin[right]:
+            left -= 1
+            right += 1
+        if right - left - 1 > len(longest_count):
+            longest_count = origin[left + 1:right]
+
+        left, right = i, i + 1
+        while left >= 0 and right < len(origin) and origin[left] == origin[right]:
+            left -= 1
+            right += 1
+        if right - left - 1 > len(longest_count):
+            longest_count = origin[left + 1:right]
+    return longest_count
 
 def are_parentheses_balanced(origin: str, /) -> bool:
     """
@@ -65,4 +95,15 @@ def get_longest_uniq_length(origin: str, /) -> int:
     >>> assert get_longest_uniq_length("abcdefg") == 7
     >>> assert get_longest_uniq_length("racecar") == 4
     """
+    start_count = 0
+    max_length = 0
+    used_smbls = []
 
+    for idx, elem in enumerate(origin):
+        if elem in used_smbls:
+            while elem in used_smbls:
+                used_smbls.remove(origin[start_count])
+                start_count += 1
+        used_smbls.append(elem)
+        max_length = max(max_length, idx - start_count + 1)
+    return max_length
